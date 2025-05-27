@@ -12,8 +12,8 @@ using Vehicle_Parking_Management.Data;
 namespace Vehicle_Parking_Management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250527102938_FirstMigrtion")]
-    partial class FirstMigrtion
+    [Migration("20250527104816_updatedMigration")]
+    partial class updatedMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

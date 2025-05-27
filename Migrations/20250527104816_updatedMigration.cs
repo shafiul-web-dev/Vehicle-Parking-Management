@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Vehicle_Parking_Management.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigrtion : Migration
+    public partial class updatedMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
