@@ -1,0 +1,6 @@
+@Vehicle_Parking_Management_HostAddress = http://localhost:5276
+
+GET {{Vehicle_Parking_Management_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
