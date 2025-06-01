@@ -17,7 +17,7 @@ namespace ParkingManagementAPI.Controllers
 			_context = context;
 		}
 
-		// 🔹 Get All Reservations with Sorting, Filtering, and Pagination
+		
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<ReservationDto>>> GetReservations(
 			[FromQuery] string vehicleType,
@@ -31,13 +31,13 @@ namespace ParkingManagementAPI.Controllers
 				.Include(r => r.Vehicle)
 				.AsQueryable();
 
-			// 🔹 Filtering by Vehicle Type
+			
 			if (!string.IsNullOrEmpty(vehicleType))
 			{
 				query = query.Where(r => r.Vehicle.Type == vehicleType);
 			}
 
-			// 🔹 Sorting Logic
+			
 			query = sortBy switch
 			{
 				"parkingLocation" => sortDirection == "asc" ? query.OrderBy(r => r.ParkingSlot.Location) : query.OrderByDescending(r => r.ParkingSlot.Location),
@@ -45,7 +45,7 @@ namespace ParkingManagementAPI.Controllers
 				_ => query
 			};
 
-			// 🔹 Pagination
+			
 			var totalRecords = await query.CountAsync();
 			var reservations = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize)
 				.Select(r => new ReservationDto
@@ -60,7 +60,7 @@ namespace ParkingManagementAPI.Controllers
 			return Ok(new { TotalRecords = totalRecords, PageNumber = pageNumber, PageSize = pageSize, Data = reservations });
 		}
 
-		// 🔹 Get Single Reservation by ID
+		
 		[HttpGet("{id}")]
 		public async Task<ActionResult<ReservationDto>> GetReservationById(int id)
 		{
@@ -80,7 +80,7 @@ namespace ParkingManagementAPI.Controllers
 			return reservation == null ? NotFound(new { message = "Reservation not found" }) : Ok(reservation);
 		}
 
-		// 🔹 Create New Reservation
+		
 		[HttpPost]
 		public async Task<ActionResult<Reservation>> AddReservation(CreateReservationDto reservationDto)
 		{
@@ -92,7 +92,7 @@ namespace ParkingManagementAPI.Controllers
 				return BadRequest(new { message = "Invalid ParkingSlotId or VehicleId" });
 			}
 
-			// 🔹 Check if the slot is available
+			
 			var isSlotTaken = await _context.Reservations.AnyAsync(r =>
 				r.ParkingSlotId == reservationDto.ParkingSlotId &&
 				(reservationDto.StartTime < r.EndTime && reservationDto.EndTime > r.StartTime));
@@ -115,7 +115,7 @@ namespace ParkingManagementAPI.Controllers
 			return CreatedAtAction(nameof(GetReservationById), new { id = reservation.Id }, reservation);
 		}
 
-		// 🔹 Update Reservation
+		
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateReservation(int id, CreateReservationDto reservationDto)
 		{
@@ -125,7 +125,7 @@ namespace ParkingManagementAPI.Controllers
 				return NotFound(new { message = "Reservation not found" });
 			}
 
-			// 🔹 Prevent updating past reservations
+			
 			if (reservation.EndTime < DateTime.Now)
 			{
 				return BadRequest(new { message = "Past reservations cannot be rescheduled." });
@@ -138,7 +138,7 @@ namespace ParkingManagementAPI.Controllers
 			return Ok(new { message = "Reservation updated successfully" });
 		}
 
-		// 🔹 Delete Reservation
+		
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteReservation(int id)
 		{
